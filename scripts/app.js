@@ -2,7 +2,6 @@ $(function() {
   $user = $('.user-input');
 
   let timer;
-
   $user.on('keyup', function(event) {
     clearTimeout(timer);
 
@@ -13,13 +12,15 @@ $(function() {
       client_secret: "ccbb9bc5d5f416f92aaff53e2ae9bd6dab909012"
     };
 
+    let fetchUser, fetchRepos;
     timer = setTimeout(async function() {
+      if (fetchUser) fetchUser.abort();
+      if (fetchRepos) fetchRepos.abort();
       try {
-        let [user, repos] = await Promise.all([
-          $.ajax({ url: `https://api.github.com/users/${$user.val()}`, data }),
-          $.ajax({ url: `https://api.github.com/users/${$user.val()}/repos`, data: { ...data, per_page: 100, sort: 'updated: desc' } })
-        ]);
-  
+        fetchUser = $.ajax({ url: `https://api.github.com/users/${$user.val()}`, data });
+        fetchRepos = $.ajax({ url: `https://api.github.com/users/${$user.val()}/repos`, data: { ...data, per_page: 100, sort: 'updated: desc' } });
+        
+        let [user, repos] = await Promise.all([fetchUser, fetchRepos]);
         showProfile(user);
         showRepos(repos);
       } catch (e) {
