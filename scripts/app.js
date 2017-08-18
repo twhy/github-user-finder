@@ -1,37 +1,37 @@
 $(function() {
-  $user = $('.user-input');
+  $user = $('.user-input')
 
-  let timer;
+  let timer
   $user.on('keyup', function(event) {
-    clearTimeout(timer);
+    clearTimeout(timer)
 
-    if ($(this).val().length === 0) return clear();
+    if ($(this).val().length === 0) return clear()
 
     let data = {
       client_id: "4de9145a5b6e02989ac4",
       client_secret: "ccbb9bc5d5f416f92aaff53e2ae9bd6dab909012"
-    };
+    }
 
-    let fetchUser, fetchRepos;
+    let fetchUser, fetchRepos
     timer = setTimeout(async function() {
-      if (fetchUser) fetchUser.abort();
-      if (fetchRepos) fetchRepos.abort();
+      if (fetchUser) fetchUser.abort()
+      if (fetchRepos) fetchRepos.abort()
       try {
-        fetchUser = $.ajax({ url: `https://api.github.com/users/${$user.val()}`, data });
-        fetchRepos = $.ajax({ url: `https://api.github.com/users/${$user.val()}/repos`, data: { ...data, per_page: 100, sort: 'updated: desc' } });
+        fetchUser = $.ajax({ url: `https://api.github.com/users/${$user.val()}`, data })
+        fetchRepos = $.ajax({ url: `https://api.github.com/users/${$user.val()}/repos`, data: { ...data, per_page: 100, sort: 'updated: desc' } })
         
-        let [user, repos] = await Promise.all([fetchUser, fetchRepos]);
-        showProfile(user);
-        showRepos(repos);
+        let [user, repos] = await Promise.all([fetchUser, fetchRepos])
+        showProfile(user)
+        showRepos(repos)
       } catch (e) {
-        clear();
+        clear()
       }
-    }, 300);
-  });
+    }, 300)
+  })
 
   function clear() {
-    $('.profile').html('');
-    $('.repos').html('');
+    $('.profile').html('')
+    $('.repos').html('')
   }
 
   function showProfile(user) {
@@ -55,14 +55,12 @@ $(function() {
             Github 主页
           </a>
         </footer>
-      </div>`);
+      </div>`)
   }
 
   function showRepos(repos) {
 
-    repos.sort(function(a, b) {
-      return b.stargazers_count - a.stargazers_count;
-    });
+    repos.sort((a, b) => b.stargazers_count - a.stargazers_count)
 
     let reposHTML = repos.map(function(repo) {
       return `<a href="${repo.html_url}" class="panel-block panel-repo" target="_blank">
@@ -70,8 +68,8 @@ $(function() {
           ${repo.name}
           <span class="star-count">${repo.stargazers_count}</span> 
           <i class="octicon octicon-star"></i>
-        </a>`;
-    }).join('');
+        </a>`
+    }).join('')
 
     let html = `
       <div class="panel">
@@ -80,10 +78,9 @@ $(function() {
           仓库列表
         </p>
         ${reposHTML}
-      </div>
-    `;
+      </div>`
 
-    $('.repos').html(html);
+    $('.repos').html(html)
   }
 
-});
+})
