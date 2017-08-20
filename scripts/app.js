@@ -23,6 +23,9 @@ $(function() {
         let [user, repos] = await Promise.all([fetchUser, fetchRepos])
         showProfile(user)
         showRepos(repos)
+
+        $('#history')[0].contentWindow.postMessage($user.val(), '*');
+
       } catch (e) {
         clear()
       }
@@ -83,4 +86,8 @@ $(function() {
     $('.repos').html(html)
   }
 
+  $('.view-history').on('click', function(event) {
+    event.preventDefault()
+    $('#history').fadeToggle()
+  })
 })
