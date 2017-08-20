@@ -66,7 +66,7 @@ h2 {
 }
 
 .container {
-  max-width: 800px;
+  max-width: 680px;
 }
 
 .user-input {
@@ -77,8 +77,8 @@ h2 {
 #history {
   right: 0;
   bottom: 0;
-  width: 320px;
-  min-height: 260px;
+  width: 200px;
+  min-height: 360px;
   position: fixed;
   display: none;
   border: 1px solid #ddd;
@@ -93,6 +93,10 @@ h2 {
 }
 
 @media (max-width: 450px) { 
+  #history {
+    width: 100%;
+    height: 260px;
+  }
   .view-history {
     right: 10px;
   }
