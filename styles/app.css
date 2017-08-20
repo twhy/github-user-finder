@@ -4,6 +4,7 @@ html {
 
 body {
   margin: 0;
+  overflow: hidden;
 }
 
 h1 {
@@ -49,6 +50,19 @@ h2 {
   width: 280px;
   height: 280px;
   display: block;
+}
+
+@media (max-width: 450px) {
+  .avatar {
+    width: 120px;
+    height: 120px;
+  }
+  .avatar + .info {
+    margin-left: .5rem;
+  }
+  .avatar + .info .item:last-child {
+    border-bottom: 0;
+  }
 }
 
 .container {
