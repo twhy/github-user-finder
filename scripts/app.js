@@ -1,30 +1,34 @@
 $(function() {
-  $user = $('.user-input')
 
-  let timer
-  $user.on('keyup', function(event) {
+  let search, timer
+
+  $('.user-input').on('keyup', function(event) {
     clearTimeout(timer)
+    
+    if (search === $(this).val()) return;
 
-    if ($(this).val().length === 0) return clear()
+    search = $(this).val()
+
+    if (search.length === 0) return clear()
 
     let data = {
       client_id: "4de9145a5b6e02989ac4",
       client_secret: "ccbb9bc5d5f416f92aaff53e2ae9bd6dab909012"
     }
-
+    
     let fetchUser, fetchRepos
     timer = setTimeout(async function() {
       if (fetchUser) fetchUser.abort()
       if (fetchRepos) fetchRepos.abort()
       try {
-        fetchUser = $.ajax({ url: `https://api.github.com/users/${$user.val()}`, data })
-        fetchRepos = $.ajax({ url: `https://api.github.com/users/${$user.val()}/repos`, data: { ...data, per_page: 100, sort: 'updated: desc' } })
+        fetchUser = $.ajax({ url: `https://api.github.com/users/${search}`, data })
+        fetchRepos = $.ajax({ url: `https://api.github.com/users/${search}/repos`, data: { ...data, per_page: 100, sort: 'updated: desc' } })
         
         let [user, repos] = await Promise.all([fetchUser, fetchRepos])
         showProfile(user)
         showRepos(repos)
 
-        $('#history')[0].contentWindow.postMessage($user.val(), '*');
+        $('#history')[0].contentWindow.postMessage(search, '*');
 
       } catch (e) {
         clear()
